@@ -40,9 +40,9 @@ int main() {
         }
 
         if (isBalanced(input)) {
-            cout << "yes" << endl;
+            cout << "yes" << "\n";
         } else {
-            cout << "no" << endl;
+            cout << "no" << "\n";
         }
     }
 
