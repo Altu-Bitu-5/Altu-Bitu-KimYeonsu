@@ -46,7 +46,9 @@ int main()
     for(int i=0;i<D;i++){
         W=W+I-O-A;
         if ((A+O-I) > T){
-            O = O + (I - O - A)/2; 
+            //참고) m2 += float(i - (m2 + a)) / 2.0;
+                       
+            O = O + float(I-A-O)/2.0; 
         }
     }
     
