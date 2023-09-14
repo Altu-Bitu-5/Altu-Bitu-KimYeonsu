@@ -1,55 +1,68 @@
 //4) 브루트포스 필수1/ 1063번: 킹
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 
+typedef pair<char, char> cc;
+
+cc move(string input, char x, char y) {
+    for (char how : input) {
+        if (how == 'R') {
+            x++;
+        }
+        else if (how == 'L') {
+            x--;
+        }
+        else if (how == 'B') {
+            y--;
+        }
+        else { // T
+            y++;
+        }
+    }
+    return { x, y };
+}
+
+bool checkRange(cc position) {
+    if (position.first < 'A' || position.first > 'H' || position.second < '1' || position.second > '8') {
+        return false;
+    }
+    return true;
+}
+
+bool isSame(cc k, cc s) {
+    return (k.first == s.first && k.second == s.second);
+}
+
 int main() {
-    char kingCol, stoneCol;
-    int kingRow, stoneRow;
+    cc king, stone;
     int N;
 
-    cin >> kingCol >> kingRow >> stoneCol >> stoneRow >> N;
+    cin >> king.first >> king.second >> stone.first >> stone.second >> N;
 
     while (N--) {
         string command;
         cin >> command;
 
-        int dx = 0, dy = 0; // 왕의 이동 거리
+        cc newKing = move(command, king.first, king.second);
 
-        if (command == "R") dx = 1;
-        else if (command == "L") dx = -1;
-        else if (command == "B") dy = -1;
-        else if (command == "T") dy = 1;
-        else if (command == "RT") { dx = 1; dy = 1; }
-        else if (command == "LT") { dx = -1; dy = 1; }
-        else if (command == "RB") { dx = 1; dy = -1; }
-        else if (command == "LB") { dx = -1; dy = -1; }
-
-        // 왕의 이동
-        int newKingCol = kingCol + dx;
-        int newKingRow = kingRow + dy;
-
-        // 왕의 이동이 체스판을 벗어나지 않는지 확인
-        if (newKingCol >= 'A' && newKingCol <= 'H' && newKingRow >= 1 && newKingRow <= 8) {
-            // 돌의 위치 업데이트
-            if (newKingCol == stoneCol && newKingRow == stoneRow) {
-                int newStoneCol = stoneCol + dx;
-                int newStoneRow = stoneRow + dy;
-
-                // 돌의 이동이 체스판을 벗어나지 않으면 돌의 위치 업데이트
-                if (newStoneCol >= 'A' && newStoneCol <= 'H' && newStoneRow >= 1 && newStoneRow <= 8) {
-                    stoneCol = newStoneCol;
-                    stoneRow = newStoneRow;
+        if (checkRange(newKing)) {
+            if (isSame(newKing, stone)) {
+                cc newStone = move(command, stone.first, stone.second);
+                if (checkRange(newStone)) {
+                    stone = newStone;
+                    king = newKing;
                 }
             }
-
-            kingCol = newKingCol;
-            kingRow = newKingRow;
+            else {
+                king = newKing;
+            }
         }
     }
 
-    cout << kingCol << kingRow << '\n';
-    cout << stoneCol << stoneRow << '\n';
+    cout << king.first << king.second << '\n';
+    cout << stone.first << stone.second << '\n';
 
     return 0;
 }
