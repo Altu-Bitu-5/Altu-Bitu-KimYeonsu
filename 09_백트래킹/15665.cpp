@@ -3,55 +3,55 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <sstream>
 
 using namespace std;
 
 int n, m;
-vector<int> arr, nums;
-stringstream ss;
+vector<int> arr;
+vector<int> printArr;
+stringstream sb;
 
-void dfs(int cnt, int before);
+void dfs(int depth) 
+{
+    if (depth == m) 
+    {
+        for (int i = 0; i < m; i++) {
+            sb << printArr[i] << " ";
+        }
+        sb << "\n";
+        return;
+    }
+
+    int before = -1;
+    for (int i = 0; i < n; i++) 
+    {
+        int now = arr[i];
+        if (before != now) 
+        {
+            before = now;
+            printArr[depth] = arr[i];
+            dfs(depth + 1);
+        }
+    }
+}
 
 int main() 
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
-    
-    cin >> n >> m;
-    
-    arr.resize(m);
-    nums.resize(n);
-    
-    for (int i = 0; i < n; i++) {
-        cin >> nums[i];
-    }
-    
-    sort(nums.begin(), nums.end());
-    
-    dfs(0, -1);
-    
-    cout << ss.str();
-    
-    return 0;
-}
+    cin >> n >> m; // 변수명 변경
 
-void dfs(int cnt, int before) 
-{
-    if (cnt == m) 
-    {
-        for (int val : arr) {
-            ss << val << ' ';
-        }
-        ss << '\n';
-        return;
+    arr.resize(n);
+    printArr.resize(m);
+
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
     }
-    
-    for (int i = 0; i < n; i++) 
-    {
-        if (before != nums[i]) 
-        {
-            arr[cnt] = nums[i];
-            dfs(cnt + 1, nums[i]);
-        }
-    }
+
+    sort(arr.begin(), arr.end());
+
+    dfs(0);
+
+    cout << sb.str();
+
+    return 0;
 }
